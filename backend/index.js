@@ -1,10 +1,13 @@
 import express from "express";
 import bodyParser from "body-parser";
+const PORT = process.env.PORT;
+if (!PORT) {
+  throw new Error(".env not found")
+}
 
 import faucetRoutes from "./routes/faucet.js";
 
 const app = express();
-const PORT = 5000;
 
 app.use(bodyParser.json());
 
