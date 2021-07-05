@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config()
 import express from 'express';
 const router = express.Router();
 import { GlitchWeb3 } from '@glitchdefi/web3'
