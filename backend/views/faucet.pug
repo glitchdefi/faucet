@@ -1,20 +1,6 @@
-html
-  head
-    title Glitch-Blockchain Faucet
-  body
-    h1 Glitch-Blockchain Faucet
-    if (captcha)
-        form(method="POST", action=post)
-            input(type="text" name="address" placeholder=" Wallet Address ")
-            br
-            p !{captcha}
-            input(type="text" name="verify") 
-            input(type="hidden" name="hash" value=hash)
-            button(type='submit') Verify captcha
-            
-    else
-        if (error)
-            div(style="color:red") Error : #{error}
-        else
-            div(style="color:green") Data : #{data}
-        a(href=path) Retry
+extends ./layout
+
+include ./faucet/index.pug
+
+block footer
+  include ./layouts/footer.pug

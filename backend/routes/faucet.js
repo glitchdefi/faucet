@@ -3,24 +3,31 @@ dotenv.config()
 import express from 'express';
 import svgCaptcha from 'svg-captcha';
 const router = express.Router();
-import { GlitchWeb3 } from '@glitchdefi/web3'
+import pkg from '@glitchdefi/web3';
 import level from 'level'
 import bcrypt from 'bcrypt';
 if (!process.env.RPC_URL) {
   throw new Error(".env not found")
 }
+const { GlitchWeb3 } = pkg;
 const MIN_BALANCE = 1e18
 const FAUCET_AMOUNT=3e18
 const web3 = new GlitchWeb3(process.env.RPC_URL)
 const db = level('my-db')
 const FAUCET_TIME = parseInt(process.env.FAUCET_TIME) || 28800000
 const saltRounds = 10;
+
+// ROUTER
+
+// --- GET
 router.get('/', (req, res) => {
   var captcha = svgCaptcha.create();
   bcrypt.hash(captcha.text, saltRounds, function (err, hash) {
     res.render('faucet', { post: '/faucet', captcha: captcha.data, hash: hash, path: req.path })
   });
-})
+});
+
+// --- SUBMIT
 router.post('/', async (req, res) => {
   try {
     const { verify, hash, address } = req.body
@@ -81,6 +88,6 @@ router.post('/', async (req, res) => {
     console.log(err)
     res.render('faucet', { post: '/faucet', error: 'Something went wrong', path: "/faucet" })
   }
+});
 
-})
 export default router;
