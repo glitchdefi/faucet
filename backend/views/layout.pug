@@ -2,13 +2,12 @@ doctype html
 html
   head
     include ./layouts/header
-
-    block scripts
-
+    // Styles
+    link(rel='stylesheet', href='/css/bootstrap.min.css')
     link(rel='stylesheet', href='/css/index.css')
-
-    block styles
-
   body
     block content
     block footer
+    // JS Scripts
+    scripts
+      script(src="js/bootstrap.min.js")
