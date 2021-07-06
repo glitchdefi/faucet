@@ -9,6 +9,8 @@ import bcrypt from 'bcrypt';
 if (!process.env.RPC_URL) {
   throw new Error(".env not found")
 }
+const MIN_BALANCE = 1e18
+const FAUCET_AMOUNT=3e18
 const web3 = new GlitchWeb3(process.env.RPC_URL)
 const db = level('my-db')
 const FAUCET_TIME = parseInt(process.env.FAUCET_TIME) || 28800000
@@ -47,7 +49,7 @@ router.post('/', async (req, res) => {
       }
 
       let balance = await web3.getBalance(address)
-      if (balance.balance > 50e18) {
+      if (balance.balance > MIN_BALANCE) {
         res.render('faucet', { post: '/faucet', data: `balance: ${balance.balance.toString()}`, path: "/faucet" })
         return
       }
@@ -67,7 +69,7 @@ router.post('/', async (req, res) => {
         await request(addr1)
       }
 
-      await web3.sendTransactionCommit({ from: account.address, to: address, value: 50e18, fee: 1e14 })
+      await web3.sendTransactionCommit({ from: account.address, to: address, value: FAUCET_AMOUNT, fee: 1e14 })
       balance = await web3.getBalance(address)
       await db.put(address, now)
       res.render('faucet', { post: '/faucet', data: `balance: ${balance.balance.toString()}`, path: "/faucet" })
