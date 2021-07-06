@@ -1,0 +1,16 @@
+.faucet-form.pb-4.mb-4
+    if (captcha)
+        form(method="POST", action=post)
+            .form-wrap
+                input(type="text" class="form-control" name="address" placeholder="Enter your Testnet account address")
+                button(type='submit' disabled class="btn btn-send") Send me 10 GLCH
+            br
+            .captcha !{captcha}
+            input(type="text" name="verify") 
+            input(type="hidden" name="hash" value=hash)
+    else
+        if (error)
+            div(style="color:red") Error : #{error}
+        else
+            div(style="color:green") Data : #{data}
+        a(href=path) Retry

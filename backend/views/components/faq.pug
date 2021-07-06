@@ -1,0 +1,22 @@
+.faqs-wrap#accordionFAQs.accordion.accordion-flush
+  .accordion-item
+    h2#faqs-headingOne.accordion-header
+      button.accordion-button.collapsed(type='button' data-bs-toggle='collapse' data-bs-target='#faqs-collapseOne' aria-expanded='false' aria-controls='faqs-collapseOne')
+        | How does it work?
+    #faqs-collapseOne.accordion-collapse.collapse(aria-labelledby='faqs-headingOne' data-bs-parent='#accordionFAQs')
+      .accordion-body
+        p This is GLCH faucet is running on the 
+            span.pink Glitch Testnet.
+        p We will provide you a small amount of funds to start using a cryptocurrency without having to buy some.
+  .accordion-item
+    h2#faqs-headingTwo.accordion-header
+      button.accordion-button.collapsed(type='button' data-bs-toggle='collapse' data-bs-target='#faqs-collapseTwo' aria-expanded='false' aria-controls='faqs-collapseTwo')
+        | How much can I get?
+    #faqs-collapseTwo.accordion-collapse.collapse(aria-labelledby='faqs-headingTwo' data-bs-parent='#accordionFAQs')
+      .accordion-body
+        p Plenty enough!
+        p With this faucet you can get 
+            span.pink 10 GLCH 
+            | in 
+            span.pink every 8 hours
+            |.
