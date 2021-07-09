@@ -46,6 +46,11 @@ router.post('/', async (req, res) => {
   try {
     var captcha = svgCaptcha.create();
     const newHash = await genHash(captcha.text)
+    if (!req || !req.body) {
+      console.log('empty req')
+      res.render('faucet', { post: '/faucet', captcha: captcha.data, hash: newHash, error: "Invalid Captcha", path: "/faucet" })
+      return
+    }
     const { verify, hash, address } = req.body
     const result = await new Promise((resolve, reject) => {
       bcrypt.compare(verify, hash, function (err, result) {
@@ -55,6 +60,7 @@ router.post('/', async (req, res) => {
     })
 
     if (!result) {
+      console.log('wrong hash', verify, hash, result)
       res.render('faucet', { post: '/faucet', captcha: captcha.data, hash: newHash, error: "Invalid Captcha", path: "/faucet" })
       return
     }

@@ -18,12 +18,8 @@ const app = express();
 app.use(timeout('300s'))
 app.use(express.static('public'));
 app.engine('pug', pug.__express)
-app.use(haltOnTimedout)
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded());
-function haltOnTimedout(req, res, next) {
-  if (!req.timedout) next()
-}
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 app.set('views', __dirname + '/views')
 app.set('view engine', 'pug')
 
