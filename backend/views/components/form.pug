@@ -1,16 +1,13 @@
 .faucet-form.pb-4.mb-4
-    if (captcha)
         form(method="POST", action=post)
             .form-wrap.mb-3
                 input(type="text" class="form-control" name="address" placeholder="Enter your Testnet account address")
-                button(type='submit' disabled class="btn btn-send") Send me 10 GLCH
+                button(type='submit' class="btn btn-send") Send me 10 GLCH
             .form-captcha
                 .captcha.me-3 !{captcha}
                 input(type="text" name="verify" placeholder="Enter captcha" class="form-control") 
                 input(type="hidden" name="hash" value=hash)
-    else
         if (error)
             div(style="color:red") Error : #{error}
-        else
-            div(style="color:green") Data : #{data}
-        a(href=path) Retry
+        if (data)
+            include ../components/toastr.pug
