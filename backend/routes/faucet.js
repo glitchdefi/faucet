@@ -11,25 +11,41 @@ if (!process.env.RPC_URL) {
 }
 const { GlitchWeb3 } = pkg;
 const MIN_BALANCE = 1e18
-const FAUCET_AMOUNT=3e18
+const FAUCET_AMOUNT=10e18
 const web3 = new GlitchWeb3(process.env.RPC_URL)
 const db = level('my-db')
 const FAUCET_TIME = parseInt(process.env.FAUCET_TIME) || 28800000
 const saltRounds = 10;
-
+function genHash(text) {
+  return new Promise((resolve, reject) => {
+    bcrypt.hash(text, saltRounds, function (err, hash) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(hash);
+      }
+    });
+  })  
+}
 // ROUTER
 
 // --- GET
-router.get('/', (req, res) => {
-  var captcha = svgCaptcha.create();
-  bcrypt.hash(captcha.text, saltRounds, function (err, hash) {
+router.get('/', async (req, res) => {
+  try {
+    var captcha = svgCaptcha.create();
+    const hash = await genHash(captcha.text)
     res.render('faucet', { post: '/faucet', captcha: captcha.data, hash: hash, path: req.path })
-  });
+  } catch (err){
+    res.render('faucet', { post: '/faucet', error: "Something Wrong! Please try again", path: "/faucet" })
+  }
+
 });
 
 // --- SUBMIT
 router.post('/', async (req, res) => {
   try {
+    var captcha = svgCaptcha.create();
+    const newHash = await genHash(captcha.text)
     const { verify, hash, address } = req.body
     const result = await new Promise((resolve, reject) => {
       bcrypt.compare(verify, hash, function (err, result) {
@@ -39,7 +55,7 @@ router.post('/', async (req, res) => {
     })
 
     if (!result) {
-      res.render('faucet', { post: '/faucet', error: "Invalid Captcha", path: "/faucet" })
+      res.render('faucet', { post: '/faucet', captcha: captcha.data, hash: newHash, error: "Invalid Captcha", path: "/faucet" })
       return
     }
     let lastFaucet = 0
@@ -51,13 +67,13 @@ router.post('/', async (req, res) => {
     try {
       const now = Date.now()
       if (now - lastFaucet < FAUCET_TIME) {
-        res.render('faucet', { post: '/faucet', error: "TOO_FAST", path: "/faucet" })
+        res.render('faucet', { post: '/faucet', captcha: captcha.data, hash: newHash, error: "TOO_FAST", path: "/faucet" })
         return
       }
 
       let balance = await web3.getBalance(address)
       if (balance.balance > MIN_BALANCE) {
-        res.render('faucet', { post: '/faucet', data: `balance: ${balance.balance.toString()}`, path: "/faucet" })
+        res.render('faucet', { post: '/faucet', captcha: captcha.data, hash: newHash, data: `balance: ${balance.balance.toString()}`, path: "/faucet" })
         return
       }
 
@@ -79,10 +95,10 @@ router.post('/', async (req, res) => {
       await web3.sendTransactionCommit({ from: account.address, to: address, value: FAUCET_AMOUNT, fee: 1e14 })
       balance = await web3.getBalance(address)
       await db.put(address, now)
-      res.render('faucet', { post: '/faucet', data: `balance: ${balance.balance.toString()}`, path: "/faucet" })
+      res.render('faucet', { post: '/faucet', captcha: captcha.data, hash: newHash,data: `balance: ${balance.balance.toString()}`, path: "/faucet" })
     } catch (e) {
       console.log(e)
-      res.render('faucet', { post: '/faucet', error: 'Something went wrong', path: "/faucet" })
+      res.render('faucet', { post: '/faucet', captcha: captcha.data, hash: newHash,error: 'Something went wrong', path: "/faucet" })
     }
   } catch (err) {
     console.log(err)
