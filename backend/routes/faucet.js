@@ -11,7 +11,7 @@ if (!process.env.RPC_URL) {
 }
 const { GlitchWeb3 } = pkg;
 const MIN_BALANCE = 1e18
-const FAUCET_AMOUNT=10e18
+const FAUCET_AMOUNT=3e18
 const web3 = new GlitchWeb3(process.env.RPC_URL)
 const db = level('my-db')
 const FAUCET_TIME = parseInt(process.env.FAUCET_TIME) || 28800000
