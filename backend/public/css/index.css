@@ -18,7 +18,7 @@ body {
     background-size: cover;
     background-attachment: fixed;
     background-image: url("../images/bg.jpg");
-    font-family: "PT Mono", monospace;
+    font-family: "IBM Plex Mono", monospace;
     font-size: 14px;
     line-height: 1.5;
     font-weight: 400;
@@ -158,11 +158,13 @@ body {
 .faucet-form .form-control:-moz-placeholder {
     color: var(--gray5);
 }
-.form-wrap .btn-send {
+.form-button {
+    width: 367px;
+}
+.form-button .btn-send {
     font-size: 16px;
     height: 40px;
-    width: 190px;
-    flex: 0 0 190px;
+    width: 100%;
     outline: none;
     display: flex;
     align-items: center;
@@ -172,10 +174,10 @@ body {
     border-radius: 0;
     box-shadow: -3px 3px 0px #00ffff, 3px -1px 0px #f100f5;
 }
-.form-wrap .btn-send:focus {
+.form-button .btn-send:focus {
     box-shadow: none;
 }
-.form-wrap .btn-send:disabled {
+.form-button .btn-send:disabled {
     background-color: rgb(228, 236, 239, 0.3);
     box-shadow: none;
 }
@@ -224,7 +226,7 @@ body {
     color: var(--gray6);
     margin-bottom: 10px;
 }
-.box-content-message a {
+a {
     color: var(--blue);
 }
 .toastr {
@@ -266,7 +268,7 @@ body {
         font-size: 30px;
     }
     .faucet-form .form-control,
-    .form-wrap .btn-send {
+    .form-button .btn-send {
         font-size: 14px;
     }
     .box-content {
@@ -274,9 +276,8 @@ body {
     }
 }
 @media (max-width: 640px) {
-    .faucet-form form {
-        display: flex;
-        flex-direction: column-reverse;
+    .form-button {
+        width: 100%;
     }
     .faucet-form .form-captcha {
         margin-bottom: 1rem;
@@ -289,7 +290,7 @@ body {
     .faucet-form .form-wrap .form-control {
         margin-bottom: 1rem;
     }
-    .form-wrap .btn-send,
+    .form-button .btn-send,
     .form-captcha .form-control {
         width: 100%;
     }
