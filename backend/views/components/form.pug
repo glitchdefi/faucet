@@ -3,14 +3,15 @@
         form(method="POST", action=post)
             .form-wrap.mb-3
                 input(type="text" class="form-control" name="address" placeholder="Enter your Testnet account address")
-                button(type='submit' disabled class="btn btn-send") Send me 10 GLCH
-            .form-captcha
+            .form-captcha.mb-3
                 .captcha.me-3 !{captcha}
                 input(type="text" name="verify" placeholder="Enter captcha" class="form-control") 
                 input(type="hidden" name="hash" value=hash)
+            .form-button
+                button(type='submit' disabled class="btn btn-send") Send me 10 GLCH
     else
         if (error)
-            div(style="color:red") Error : #{error}
+            div(style="color:red", class="mb-2") Error : #{error}
         else
-            div(style="color:green") Data : #{data}
+            div(style="color:green", class="mb-2") Data : #{data}
         a(href=path) Retry
