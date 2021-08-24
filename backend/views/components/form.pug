@@ -7,8 +7,8 @@
             input(type="text" name="verify" placeholder="Enter captcha" class="form-control") 
             input(type="hidden" name="hash" value=hash)
         .form-button
-            button(type='submit' disabled class="btn btn-send") Send me 3 GLCH
+            button(type='submit' class="btn btn-send") Send me 1 GLCH
     if (error)
-        div(style="color:red", class="mb-2") Error : #{error}
+        div(style="color:red", class="mb-2") Error: #{error}
     if (data)
         include ../components/toastr.pug

@@ -11,10 +11,11 @@ if (!process.env.RPC_URL) {
 }
 const { GlitchWeb3 } = pkg;
 const MIN_BALANCE = 1e18
-const FAUCET_AMOUNT=3e18
+const FAUCET_AMOUNT = 1e18
 const web3 = new GlitchWeb3(process.env.RPC_URL)
 const db = level('my-db')
 const FAUCET_TIME = parseInt(process.env.FAUCET_TIME) || 28800000
+const FAUCET_TIME_STR = process.env.FAUCET_TIME_STR || '8 hours'
 const saltRounds = 10;
 function genHash(text) {
   return new Promise((resolve, reject) => {
@@ -66,20 +67,20 @@ router.post('/', async (req, res) => {
     }
     let lastFaucet = 0
     try {
-      lastFaucet = await db.get(address)
+      lastFaucet = parseInt(await db.get(address));
     } catch (err) {
 
     }
     try {
       const now = Date.now()
       if (now - lastFaucet < FAUCET_TIME) {
-        res.render('faucet', { post: '/faucet', captcha: captcha.data, hash: newHash, error: "TOO_FAST", path: "/faucet" })
+        res.render('faucet', { post: '/faucet', captcha: captcha.data, hash: newHash, error: `You just requested GLITCH please wait for ${FAUCET_TIME_STR} to request again`, path: "/faucet" })
         return
       }
 
       let balance = await web3.getBalance(address)
       if (balance.balance > MIN_BALANCE) {
-        res.render('faucet', { post: '/faucet', captcha: captcha.data, hash: newHash, data: `balance: ${balance.balance.toString()}`, path: "/faucet" })
+        res.render('faucet', { post: '/faucet', captcha: captcha.data, hash: newHash, error: "You are already rich", path: "/faucet" })
         return
       }
 
@@ -94,7 +95,7 @@ router.post('/', async (req, res) => {
       const account = web3.wallet.importAccount(process.env.ACCOUNT_PRIV_KEY)
       const addr1 = account.address
       balance = await web3.getBalance(addr1)
-      if (balance.balance < BigInt(1e18)) {
+      if (balance.balance < BigInt(FAUCET_AMOUNT)) {
         await request(addr1)
       }
 
