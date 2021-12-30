@@ -11,6 +11,7 @@
     --gray4: #a7c1ca;
     --gray5: #395660;
     --gray6: #dbdbdb;
+    --cyan3: #008080;
 }
 body {
     background-position: center top;
@@ -28,7 +29,7 @@ body {
     padding-top: 9px;
     padding-bottom: 9px;
     font-size: 12px;
-    background-color: var(--red);
+    background-color: var(--cyan3);
     color: var(--gray);
     border: none;
     position: relative;
