@@ -9,8 +9,10 @@ const PORT = process.env.PORT;
 if (!PORT) {
   throw new Error(".env not found")
 }
-
-import faucetRoutes from "./routes/faucet.js";
+import substrateService from './service/substrate.js'
+substrateService.init()
+// import faucetRoutes from "./routes/faucet.js";
+import faucetRoutes from "./routes/faucet_substrate.js";
 const __dirname = path.resolve(path.dirname(''));
 var pub = __dirname + '/public';
 const app = express();
