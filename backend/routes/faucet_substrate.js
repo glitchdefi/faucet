@@ -17,6 +17,8 @@ const FAUCET_TIME = parseInt(process.env.FAUCET_TIME) || 28800000
 const FAUCET_TIME_STR = process.env.FAUCET_TIME_STR || '8 hours'
 const saltRounds = 10;
 
+let queue = {}
+
 const ROUTER_ENDPOINT = '/faucet'
 function genHash(text) {
   return new Promise((resolve, reject) => {
@@ -67,12 +69,17 @@ router.post('/', async (req, res) => {
       res.render('faucet', { post: ROUTER_ENDPOINT, captcha: captcha.data, hash: newHash, error: "Invalid Captcha", path: ROUTER_ENDPOINT })
       return
     }
+
+    if (queue[address]) {
+      return
+    } else {
+      queue[address] = true
+    }
+
     let lastFaucet = 0
     try {
       lastFaucet = parseInt(await db.get(address));
-    } catch (err) {
-
-    }
+    } catch (err) {}
     try {
       const now = Date.now()
       if (now - lastFaucet < FAUCET_TIME) {
@@ -93,6 +100,8 @@ router.post('/', async (req, res) => {
     } catch (e) {
       console.log(e)
       res.render('faucet', { post: ROUTER_ENDPOINT, captcha: captcha.data, hash: newHash,error: 'Something went wrong', path: ROUTER_ENDPOINT })
+    } finally {
+      delete queue[address]
     }
   } catch (err) {
     console.log(err)
