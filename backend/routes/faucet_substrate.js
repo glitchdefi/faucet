@@ -71,6 +71,7 @@ router.post('/', async (req, res) => {
     }
 
     if (queue[address]) {
+      res.render('faucet', { post: ROUTER_ENDPOINT, captcha: captcha.data, hash: newHash, error: `You just requested GLITCH please wait for ${FAUCET_TIME_STR} to request again`, path: ROUTER_ENDPOINT })
       return
     } else {
       queue[address] = true
