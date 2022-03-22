@@ -21,7 +21,9 @@
     "level": "^7.0.0",
     "pug": "^3.0.2",
     "svg-captcha": "^1.4.0",
-    "uuid": "^8.2.0"
+    "uuid": "^8.2.0",
+    "@polkadot/api": "^7.2.1",
+    "@polkadot/keyring": "^8.2.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
